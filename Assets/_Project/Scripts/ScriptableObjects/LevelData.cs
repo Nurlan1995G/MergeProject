@@ -12,14 +12,12 @@ namespace Assets._Project.Scripts.ScriptableObjects
         [SerializeField] private int _columns;
 
         [Header("Game Objects")]
-        [SerializeField] private ItemWeaponView _itemsHunterKnif;
         [SerializeField] private CellView _cellPrefab;
 
         [Header("Size Objects")]
         [SerializeField] private float _sizeCell = 0.5f;
         [SerializeField] private float _sizeItem = 0.5f;
 
-        public ItemWeaponView ItemsHunterKnif => _itemsHunterKnif;
         public CellView CellPrefab => _cellPrefab;
         public int Rows => _rows;
         public int Colums => _columns;

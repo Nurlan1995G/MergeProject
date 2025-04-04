@@ -7,16 +7,13 @@ namespace Assets._Project.Scripts.Items.Factory
 {
     public class ItemFactory
     {
-        private readonly ItemWeaponView _itemPrefabs;
-
-        public ItemFactory(LevelData levelData)
+        public ItemFactory()
         {
-            _itemPrefabs = levelData.ItemsHunterKnif;
         }
 
-        public ItemWeaponView GetItem(Vector3 position)
+        public ItemWeaponView GetItem(Vector3 position, ItemWeaponView itemPrefabs)
         {
-            ItemWeaponView item = Object.Instantiate(_itemPrefabs, position, Quaternion.identity);
+            ItemWeaponView item = Object.Instantiate(itemPrefabs, position, Quaternion.identity);
             return item;
         }
     }

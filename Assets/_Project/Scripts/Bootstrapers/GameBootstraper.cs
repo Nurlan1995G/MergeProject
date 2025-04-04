@@ -12,18 +12,18 @@ namespace Assets._Project.Scripts.Bootstrapers
     {
         [SerializeField] private GameConfig _gameConfig;
         [SerializeField] private LevelController _levelController;
-        [SerializeField] private CellsController _cellsController;
-        [SerializeField] private ItemsController _itemsController;
+        [SerializeField] private ItemWeaponController _itemsController;
         [SerializeField] private List<LevelData> _levelDatas;
         [SerializeField] private List<CellView> _cells;
         [SerializeField] private PlayerInputHandler _inputHandler;
+        [SerializeField] private List<ItemWeaponData> _itemWeaponDatas;
 
         private void Awake()
         {
             //_cellsController.Initialize(_gameConfig);
             _inputHandler.Construct();
             _itemsController.Initialize(_gameConfig.LevelData);
-            _levelController.Initialize(_levelDatas, _cellsController, _itemsController, _cells);
+            _levelController.Initialize(_itemsController, _cells, _itemWeaponDatas);
         }
     }
 }

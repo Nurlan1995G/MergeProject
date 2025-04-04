@@ -1,30 +1,24 @@
-﻿using UnityEngine;
+﻿using Assets._Project.Scripts.Cells;
+using Assets._Project.Scripts.ScriptableObjects;
+using System;
+using UnityEngine;
 
 namespace Assets._Project.Scripts
 {
     public class ItemWeaponView : MonoBehaviour
     {
-        [SerializeField] private ItemType _itemType;
-        [SerializeField] private int _level;
-        [SerializeField] private int _price;
-        [SerializeField] private int _reward;
-
+        private CellView _currentCell;
         private ItemWeaponModel _weaponModel;
 
+        public CellView CurrentCell => _currentCell;
         public ItemWeaponModel ItemWeaponModel => _weaponModel;
 
-        public void SetItemWeaponModel(int id)
-        {
-            _weaponModel = new ItemWeaponModel(id, _level, _price, _reward, _itemType);
-        }
-    }
+        public void SetCurrentCell(CellView cell) => 
+            _currentCell = cell;
 
-    public enum ItemType
-    {
-        HunterKnif = 1,
-        AssassinDagger,
-        SharpenedInfantrySword,
-        BalancedSword,
-        ManticoreSword
+        public void CreateModel(ItemWeaponModel model)
+        {
+            _weaponModel = model;
+        }
     }
 }

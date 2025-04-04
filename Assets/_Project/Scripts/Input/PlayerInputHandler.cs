@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets._Project.Scripts.Items.Controllers;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,7 +11,7 @@ namespace Assets._Project.Scripts.Input
         private Camera _mainCamera;
         private InputAction _currentTapAction;
 
-        public event Action<ItemWeaponView> OnItemClicked;
+        public event Action<ItemWeaponController> OnItemClicked;
 
         public void Construct()
         {
@@ -46,12 +47,13 @@ namespace Assets._Project.Scripts.Input
             else
                 inputPosition = Mouse.current.position.ReadValue();
 
-            Vector2 worldPosition = _mainCamera.ScreenToWorldPoint(inputPosition);
+            //Vector3 worldPosition = (Vector2)_mainCamera.ScreenToWorldPoint(inputPosition);
+            Vector3 worldPosition = _mainCamera.ScreenToWorldPoint(new Vector3(inputPosition.x, inputPosition.y, Mathf.Abs(_mainCamera.transform.position.z)));
+
             Collider2D hit = Physics2D.OverlapPoint(worldPosition);
 
-            if (hit != null && hit.TryGetComponent(out ItemWeaponView item))
+            if (hit != null && hit.TryGetComponent(out ItemWeaponController item))
             {
-                Debug.Log($"Подобран предмет: {item.ItemWeaponModel.ItemType}");
                 OnItemClicked?.Invoke(item);
             }
         }

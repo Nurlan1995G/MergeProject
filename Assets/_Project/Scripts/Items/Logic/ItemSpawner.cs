@@ -1,4 +1,5 @@
 ﻿using Assets._Project.Scripts.Items.Factory;
+using Assets._Project.Scripts.ScriptableObjects;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,17 +14,10 @@ namespace Assets._Project.Scripts.Items.Logic
             _itemFactory = itemFactory;
         }
 
-        public List<ItemWeaponView> SpawnItems(List<Vector3> cellPositions)
+        public ItemWeaponView SpawnItem(ItemWeaponData weaponData, Vector3 cellPositions)
         {
-            List<ItemWeaponView> spawnedItems = new List<ItemWeaponView>();
-
-            foreach (var position in cellPositions)
-            {
-                ItemWeaponView item = _itemFactory.GetItem(position);
-                spawnedItems.Add(item);
-            }
-
-            return spawnedItems;
+            ItemWeaponView item = _itemFactory.GetItem(cellPositions, weaponData.PrefabItemWeapon);
+            return item;
         }
     }
 }

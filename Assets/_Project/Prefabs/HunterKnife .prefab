@@ -102,7 +102,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemType: 1
-  _id: 0
   _level: 1
   _price: 3
   _reward: 3

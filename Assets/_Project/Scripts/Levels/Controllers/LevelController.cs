@@ -9,28 +9,58 @@ namespace Assets._Project.Scripts.Levels.Controllers
 {
     public class LevelController : MonoBehaviour
     {
-        private LevelData _currentLevelData;
+        private List<ItemWeaponData> _itemWeaponDatas;
+        private ItemWeaponController _itemsController;
+        private List<CellView> _cells;
 
-        public void Initialize(List<LevelData> levels, CellsController cellsController, ItemsController itemsController, List<CellView> cells)
+        public void Initialize(ItemWeaponController itemsController, List<CellView> cells, List<ItemWeaponData> itemWeaponDatas)
         {
-            _currentLevelData = levels[0];
+            _itemWeaponDatas = itemWeaponDatas;
+            _itemsController = itemsController;
+            _cells = cells;
 
-            List<Vector3> cellPositions = cells.Select(cell => cell.transform.position).ToList();
+            SpawnInitialItems();
+        }
 
-            if (_currentLevelData.LevelIndex == 1)
+        private void SpawnInitialItems()
+        {
+            var freeCells = GetFreeCells();
+
+            if (freeCells.Count < 2)
+                return;
+
+            var itemData = GetItemDataByLevel(1);
+            if (itemData == null)
+                return;
+
+            var selectedCells = freeCells.OrderBy(_ => Random.value).Take(2).ToList();
+            _itemsController.SpawnItems(itemData, selectedCells);
+        }
+
+
+        public void TryBuyItem()
+        {
+            var freeCells = GetFreeCells();
+            
+            if (freeCells.Count == 0)
             {
-                SpawnFirstLevelItems(itemsController, cellPositions);
+                Debug.Log("Нет свободных ячеек для покупки.");
+                return;
+            }
+
+            var itemData = GetItemDataByLevel(1);
+
+            if (itemData != null)
+            {
+                var targetCell = freeCells[0];
+                _itemsController.SpawnItems(itemData, targetCell);
             }
         }
 
-        private void SpawnFirstLevelItems(ItemsController itemsController, List<Vector3> cellPositions)
-        {
-            if (cellPositions.Count < 2) 
-                return;
+        private List<CellView> GetFreeCells() => 
+            _cells.Where(cell => !cell.IsBusy).ToList();
 
-            List<Vector3> selectedPositions = cellPositions.OrderBy(x => Random.value).Take(2).ToList();
-
-            itemsController.SpawnItem(selectedPositions);
-        }
+        private ItemWeaponData GetItemDataByLevel(int level) => 
+            _itemWeaponDatas.FirstOrDefault(data => data.Level == level);
     }
 }

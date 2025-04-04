@@ -14,12 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rows: 0
   _columns: 0
-  _items:
-  - {fileID: 2900390954605328793, guid: bc9142045985a54478c4314170e296be, type: 3}
-  - {fileID: 5163524988143335470, guid: 9c0a2c4ba7b9b1749b2297d4faeab0b3, type: 3}
-  - {fileID: 3970322846531104952, guid: d51f92248c89ab24eb5ff68ec649c26d, type: 3}
-  - {fileID: 8682582207211341634, guid: 3d7c6125418d4e140ad40dbda2dbcd8a, type: 3}
-  - {fileID: 1544751228392375264, guid: 9790a93e4701fb5419cb160b3500fbca, type: 3}
+  _itemsHunterKnif: {fileID: 3970322846531104952, guid: d51f92248c89ab24eb5ff68ec649c26d, type: 3}
   _cellPrefab: {fileID: 0}
   _sizeCell: 0.5
   _sizeItem: 0.5
+  LevelIndex: 1
