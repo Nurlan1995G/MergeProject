@@ -101,11 +101,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9785482de848554cac0ebbc15156f92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _itemType: 5
-  _id: 0
-  _level: 5
-  _price: 20
-  _reward: 20
 --- !u!61 &-1150205617255690504
 BoxCollider2D:
   m_ObjectHideFlags: 0

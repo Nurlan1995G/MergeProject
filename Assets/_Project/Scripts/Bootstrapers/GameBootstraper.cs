@@ -3,6 +3,7 @@ using Assets._Project.Scripts.Input;
 using Assets._Project.Scripts.Items.Controllers;
 using Assets._Project.Scripts.Levels.Controllers;
 using Assets._Project.Scripts.ScriptableObjects;
+using Assets._Project.Scripts.UI;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,13 +18,40 @@ namespace Assets._Project.Scripts.Bootstrapers
         [SerializeField] private List<CellView> _cells;
         [SerializeField] private PlayerInputHandler _inputHandler;
         [SerializeField] private List<ItemWeaponData> _itemWeaponDatas;
+        [SerializeField] private MergeController _mergeController;
+        [SerializeField] private GamesBeckendHandler _backendHandler;
+        [SerializeField] private MenuController _menuController;
 
         private void Awake()
         {
-            //_cellsController.Initialize(_gameConfig);
+            PlayerData playerData = new PlayerData();
+            
+            HandlePlayerItemWeapon();
+            HandlePlayerBalance();
+
+            _menuController.Construct(playerData);
+            _menuController.ShowBalancePlayer();
+
             _inputHandler.Construct();
             _itemsController.Initialize(_gameConfig.LevelData);
             _levelController.Initialize(_itemsController, _cells, _itemWeaponDatas);
+            _mergeController.Initialize(_itemsController, _itemWeaponDatas, _inputHandler);
+        }
+
+        private void HandlePlayerItemWeapon()
+        {
+            _backendHandler.GetItemWeapon(
+            {
+                
+            });
+        }
+
+        private void HandlePlayerBalance()
+        {
+            _backendHandler.GetBalance(
+            {
+                
+            });
         }
     }
 }

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f43dbf6265eea7441a11ccb089da279e, type: 3}
-  m_Name: SharpenedInfantry
+  m_Name: ManticoreSword
   m_EditorClassIdentifier: 
-  _level: 3
-  _price: 20
-  _reward: 20
-  _itemType: 3
-  _prefabItemWeapon: {fileID: 1544751228392375264, guid: 9790a93e4701fb5419cb160b3500fbca, type: 3}
+  _level: 5
+  _price: 10
+  _reward: 10
+  _itemType: 5
+  _prefabItemWeapon: {fileID: 8682582207211341634, guid: 3d7c6125418d4e140ad40dbda2dbcd8a, type: 3}

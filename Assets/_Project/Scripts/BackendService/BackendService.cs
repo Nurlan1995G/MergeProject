@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets._Project.Scripts
@@ -28,9 +29,9 @@ namespace Assets._Project.Scripts
             return _playerData.Balance.ToString();
         }
 
-        public int GetLevel()
+        public List<ItemWeaponView> GetItemWeapon()
         {
-            return _playerData.Level;
+            return _playerData.ItemWeaponViews;
         }
 
         public void AddBalance(int amount)
@@ -39,10 +40,14 @@ namespace Assets._Project.Scripts
             Debug.Log($"Баланс обновлен: {_playerData.Balance}");
         }
 
-        public void LevelUp()
+        public void AddItemWeapon(ItemWeaponView item)
         {
-            _playerData.Level += 1;
-            Debug.Log($"Уровень повышен: {_playerData.Level}");
+            _playerData.ItemWeaponViews.Add(item);
+        }
+
+        public void RemoveItemWeapon(ItemWeaponView item)
+        {
+            _playerData.ItemWeaponViews.Remove(item);
         }
     }
 }

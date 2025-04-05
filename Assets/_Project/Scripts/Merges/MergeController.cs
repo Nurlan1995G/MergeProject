@@ -1,4 +1,5 @@
-﻿using Assets._Project.Scripts.Items.Controllers;
+﻿using Assets._Project.Scripts.Input;
+using Assets._Project.Scripts.Items.Controllers;
 using Assets._Project.Scripts.ScriptableObjects;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,44 +11,55 @@ namespace Assets._Project.Scripts.Levels.Controllers
     {
         private ItemWeaponController _itemController;
         private List<ItemWeaponData> _itemDatas;
+        private PlayerInputHandler _inputHandler;
 
-        public void Initialize(ItemWeaponController itemController, List<ItemWeaponData> itemDatas)
+        public void Initialize(ItemWeaponController itemController, List<ItemWeaponData> itemDatas, PlayerInputHandler inputHandler)
         {
             _itemController = itemController;
             _itemDatas = itemDatas;
+            _inputHandler = inputHandler;
+            
+            _inputHandler.OnMergeRequested += TryMerge;
         }
 
-        public void TryMerge(ItemWeaponView targetItem, ItemWeaponView sourceItem)
+        public void TryMerge(ItemWeaponView sourceItem, ItemWeaponView targetItem)
         {
-            if (targetItem == null || sourceItem == null)
+            if (sourceItem == null || targetItem == null || sourceItem == targetItem) return;
+
+            if (!CanMerge(sourceItem, targetItem))
                 return;
 
-            if (targetItem == sourceItem)
-                return;
-
-            var targetData = targetItem.ItemWeaponModel;
             var sourceData = sourceItem.ItemWeaponModel;
+            var targetData = targetItem.ItemWeaponModel;
 
-            if (targetData.Level == sourceData.Level && targetData.ItemType == sourceData.ItemType)
+            var nextLevel = sourceData.Level + 1;
+            var nextData = _itemDatas.FirstOrDefault(d => d.Level == nextLevel);
+
+            if (nextData == null)
             {
-                var nextLevel = targetData.Level + 1;
-                var nextItemData = _itemDatas.FirstOrDefault(d => d.Level == nextLevel && d.ItemType == targetData.ItemType);
-
-                if (nextItemData == null)
-                {
-                    Debug.Log("Max level reached. No further merge.");
-                    return;
-                }
-
-                var mergePosition = targetItem.transform.position;
-                var mergeCell = targetItem.CurrentCell;
-
-                mergeCell.MarkAsFree();
-                Destroy(targetItem.gameObject);
-                Destroy(sourceItem.gameObject);
-
-                _itemController.SpawnItems(nextItemData, mergeCell);
+                Debug.Log("Макс. уровень");
+                return;
             }
+
+            var mergeCell = targetItem.CurrentCell;
+
+            sourceItem.CurrentCell.MarkAsFree();
+            targetItem.CurrentCell.MarkAsFree();
+
+            Destroy(sourceItem.gameObject);
+            Destroy(targetItem.gameObject);
+
+            _itemController.SpawnItems(nextData, mergeCell);
+        }
+
+        private void OnDisable() => 
+            _inputHandler.OnMergeRequested -= TryMerge;
+
+        private bool CanMerge(ItemWeaponView sourceItem, ItemWeaponView targetItem)
+        {
+            return sourceItem.ItemWeaponModel.ItemType == targetItem.ItemWeaponModel.ItemType &&
+                   sourceItem.ItemWeaponModel.Level == targetItem.ItemWeaponModel.Level &&
+                   sourceItem.ItemWeaponModel.ID != targetItem.ItemWeaponModel.ID;
         }
     }
 }

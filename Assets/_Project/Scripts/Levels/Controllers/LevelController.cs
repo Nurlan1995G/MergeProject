@@ -22,22 +22,6 @@ namespace Assets._Project.Scripts.Levels.Controllers
             SpawnInitialItems();
         }
 
-        private void SpawnInitialItems()
-        {
-            var freeCells = GetFreeCells();
-
-            if (freeCells.Count < 2)
-                return;
-
-            var itemData = GetItemDataByLevel(1);
-            if (itemData == null)
-                return;
-
-            var selectedCells = freeCells.OrderBy(_ => Random.value).Take(2).ToList();
-            _itemsController.SpawnItems(itemData, selectedCells);
-        }
-
-
         public void TryBuyItem()
         {
             var freeCells = GetFreeCells();
@@ -56,6 +40,22 @@ namespace Assets._Project.Scripts.Levels.Controllers
                 _itemsController.SpawnItems(itemData, targetCell);
             }
         }
+
+        private void SpawnInitialItems()
+        {
+            var freeCells = GetFreeCells();
+
+            if (freeCells.Count < 2)
+                return;
+
+            var itemData = GetItemDataByLevel(1);
+            if (itemData == null)
+                return;
+
+            var selectedCells = freeCells.OrderBy(_ => Random.value).Take(2).ToList();
+            _itemsController.SpawnItems(itemData, selectedCells);
+        }
+
 
         private List<CellView> GetFreeCells() => 
             _cells.Where(cell => !cell.IsBusy).ToList();

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 
 namespace Assets._Project.Scripts
 {
@@ -6,6 +8,7 @@ namespace Assets._Project.Scripts
     public class PlayerData
     {
         public int Balance { get; set; } = 0;
-        public int Level { get; set; } = 1;
+        public ItemWeaponView Item { get; set; }
+        public List<ItemWeaponView> ItemWeaponViews;
     }
 }

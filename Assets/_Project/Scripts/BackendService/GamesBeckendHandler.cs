@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets._Project.Scripts
@@ -13,10 +14,10 @@ namespace Assets._Project.Scripts
             onBalanceReceived?.Invoke(balance);
         }
 
-        public void GetLevel(Action<int> onLevelReceived)
+        public void GetItemWeapon(Action<List<ItemWeaponView>> onLevelReceived)
         {
-            int level = _backendService.GetLevel();
-            onLevelReceived?.Invoke(level);
+            List<ItemWeaponView> item = _backendService.GetItemWeapon();
+            onLevelReceived?.Invoke(item);
         }
 
         public void PostReward(int amount)

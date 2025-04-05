@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f43dbf6265eea7441a11ccb089da279e, type: 3}
-  m_Name: BalancedSword
+  m_Name: HunterKnif
   m_EditorClassIdentifier: 
-  _level: 4
-  _price: 40
-  _reward: 40
-  _itemType: 4
-  _prefabItemWeapon: {fileID: 5163524988143335470, guid: 9c0a2c4ba7b9b1749b2297d4faeab0b3, type: 3}
+  _level: 1
+  _price: 15
+  _reward: 10
+  _itemType: 1
+  _prefabItemWeapon: {fileID: 3970322846531104952, guid: d51f92248c89ab24eb5ff68ec649c26d, type: 3}

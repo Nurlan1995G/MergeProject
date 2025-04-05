@@ -35,6 +35,24 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""TouchPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""737d00d6-bc31-4cbb-a82f-2ebccacf88e1"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""TouchRelease"",
+                    ""type"": ""Button"",
+                    ""id"": ""d8b11d04-3216-4ff2-9d4c-9c1bc527a0be"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -59,6 +77,28 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""Tap"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1e904f78-13bb-4a07-86bf-349a040bca14"",
+                    ""path"": ""<Touchscreen>/primaryTouch/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TouchPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1e32e00c-a3c7-4959-b1d3-d82cb6dbf110"",
+                    ""path"": ""<Touchscreen>/Press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""TouchRelease"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -74,6 +114,24 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""MousePosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""8ad7ebfd-d17e-450d-a391-cda4f5bb223f"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""MouseRelease"",
+                    ""type"": ""Button"",
+                    ""id"": ""7cca6395-158c-409d-8a8f-f0e035b81183"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -87,6 +145,28 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""MouseTap"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2db93392-a505-4690-8e94-1be2b9334d14"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MousePosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b82ca03c-3043-44ce-832c-9938d8664722"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseRelease"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -96,9 +176,13 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         // PassThrough
         m_PassThrough = asset.FindActionMap("PassThrough", throwIfNotFound: true);
         m_PassThrough_Tap = m_PassThrough.FindAction("Tap", throwIfNotFound: true);
+        m_PassThrough_TouchPosition = m_PassThrough.FindAction("TouchPosition", throwIfNotFound: true);
+        m_PassThrough_TouchRelease = m_PassThrough.FindAction("TouchRelease", throwIfNotFound: true);
         // Mouse
         m_Mouse = asset.FindActionMap("Mouse", throwIfNotFound: true);
         m_Mouse_MouseTap = m_Mouse.FindAction("MouseTap", throwIfNotFound: true);
+        m_Mouse_MousePosition = m_Mouse.FindAction("MousePosition", throwIfNotFound: true);
+        m_Mouse_MouseRelease = m_Mouse.FindAction("MouseRelease", throwIfNotFound: true);
     }
 
     ~@PlayerInput()
@@ -167,11 +251,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_PassThrough;
     private List<IPassThroughActions> m_PassThroughActionsCallbackInterfaces = new List<IPassThroughActions>();
     private readonly InputAction m_PassThrough_Tap;
+    private readonly InputAction m_PassThrough_TouchPosition;
+    private readonly InputAction m_PassThrough_TouchRelease;
     public struct PassThroughActions
     {
         private @PlayerInput m_Wrapper;
         public PassThroughActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Tap => m_Wrapper.m_PassThrough_Tap;
+        public InputAction @TouchPosition => m_Wrapper.m_PassThrough_TouchPosition;
+        public InputAction @TouchRelease => m_Wrapper.m_PassThrough_TouchRelease;
         public InputActionMap Get() { return m_Wrapper.m_PassThrough; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -184,6 +272,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Tap.started += instance.OnTap;
             @Tap.performed += instance.OnTap;
             @Tap.canceled += instance.OnTap;
+            @TouchPosition.started += instance.OnTouchPosition;
+            @TouchPosition.performed += instance.OnTouchPosition;
+            @TouchPosition.canceled += instance.OnTouchPosition;
+            @TouchRelease.started += instance.OnTouchRelease;
+            @TouchRelease.performed += instance.OnTouchRelease;
+            @TouchRelease.canceled += instance.OnTouchRelease;
         }
 
         private void UnregisterCallbacks(IPassThroughActions instance)
@@ -191,6 +285,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Tap.started -= instance.OnTap;
             @Tap.performed -= instance.OnTap;
             @Tap.canceled -= instance.OnTap;
+            @TouchPosition.started -= instance.OnTouchPosition;
+            @TouchPosition.performed -= instance.OnTouchPosition;
+            @TouchPosition.canceled -= instance.OnTouchPosition;
+            @TouchRelease.started -= instance.OnTouchRelease;
+            @TouchRelease.performed -= instance.OnTouchRelease;
+            @TouchRelease.canceled -= instance.OnTouchRelease;
         }
 
         public void RemoveCallbacks(IPassThroughActions instance)
@@ -213,11 +313,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Mouse;
     private List<IMouseActions> m_MouseActionsCallbackInterfaces = new List<IMouseActions>();
     private readonly InputAction m_Mouse_MouseTap;
+    private readonly InputAction m_Mouse_MousePosition;
+    private readonly InputAction m_Mouse_MouseRelease;
     public struct MouseActions
     {
         private @PlayerInput m_Wrapper;
         public MouseActions(@PlayerInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @MouseTap => m_Wrapper.m_Mouse_MouseTap;
+        public InputAction @MousePosition => m_Wrapper.m_Mouse_MousePosition;
+        public InputAction @MouseRelease => m_Wrapper.m_Mouse_MouseRelease;
         public InputActionMap Get() { return m_Wrapper.m_Mouse; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -230,6 +334,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @MouseTap.started += instance.OnMouseTap;
             @MouseTap.performed += instance.OnMouseTap;
             @MouseTap.canceled += instance.OnMouseTap;
+            @MousePosition.started += instance.OnMousePosition;
+            @MousePosition.performed += instance.OnMousePosition;
+            @MousePosition.canceled += instance.OnMousePosition;
+            @MouseRelease.started += instance.OnMouseRelease;
+            @MouseRelease.performed += instance.OnMouseRelease;
+            @MouseRelease.canceled += instance.OnMouseRelease;
         }
 
         private void UnregisterCallbacks(IMouseActions instance)
@@ -237,6 +347,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @MouseTap.started -= instance.OnMouseTap;
             @MouseTap.performed -= instance.OnMouseTap;
             @MouseTap.canceled -= instance.OnMouseTap;
+            @MousePosition.started -= instance.OnMousePosition;
+            @MousePosition.performed -= instance.OnMousePosition;
+            @MousePosition.canceled -= instance.OnMousePosition;
+            @MouseRelease.started -= instance.OnMouseRelease;
+            @MouseRelease.performed -= instance.OnMouseRelease;
+            @MouseRelease.canceled -= instance.OnMouseRelease;
         }
 
         public void RemoveCallbacks(IMouseActions instance)
@@ -257,9 +373,13 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     public interface IPassThroughActions
     {
         void OnTap(InputAction.CallbackContext context);
+        void OnTouchPosition(InputAction.CallbackContext context);
+        void OnTouchRelease(InputAction.CallbackContext context);
     }
     public interface IMouseActions
     {
         void OnMouseTap(InputAction.CallbackContext context);
+        void OnMousePosition(InputAction.CallbackContext context);
+        void OnMouseRelease(InputAction.CallbackContext context);
     }
 }

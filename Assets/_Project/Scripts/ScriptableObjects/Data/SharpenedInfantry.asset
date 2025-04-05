@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f43dbf6265eea7441a11ccb089da279e, type: 3}
-  m_Name: HunterKnif
+  m_Name: SharpenedInfantry
   m_EditorClassIdentifier: 
-  _level: 1
-  _price: 5
-  _reward: 5
-  _itemType: 1
-  _prefabItemWeapon: {fileID: 3970322846531104952, guid: d51f92248c89ab24eb5ff68ec649c26d, type: 3}
+  _level: 3
+  _price: 10
+  _reward: 10
+  _itemType: 3
+  _prefabItemWeapon: {fileID: 1544751228392375264, guid: 9790a93e4701fb5419cb160b3500fbca, type: 3}
