@@ -1,31 +1,38 @@
-﻿using Assets._Project.Scripts.Cells;
-using Assets._Project.Scripts.Items.Controllers;
+﻿using Assets._Project.Scripts.BackendService;
+using Assets._Project.Scripts.Cells;
 using Assets._Project.Scripts.ScriptableObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Assets._Project.Scripts.Levels.Controllers
 {
-    public class LevelController : MonoBehaviour
+    public class LevelController : MonoBehaviour, ILevelController
     {
         private List<ItemWeaponData> _itemWeaponDatas;
-        private ItemWeaponController _itemsController;
+        private IItemWeaponController _itemsController;
         private List<CellView> _cells;
+        private GamesBeckendHandler _beckendHandler;
 
-        public void Initialize(ItemWeaponController itemsController, List<CellView> cells, List<ItemWeaponData> itemWeaponDatas)
+        private int OneLevelItem = 1;
+        private int CountItem = 2;
+
+        public void Initialize(IItemWeaponController itemsController, List<CellView> cells, List<ItemWeaponData> itemWeaponDatas, GamesBeckendHandler beckendHandler)
         {
             _itemWeaponDatas = itemWeaponDatas;
             _itemsController = itemsController;
             _cells = cells;
-
-            SpawnInitialItems();
+            _beckendHandler = beckendHandler;
         }
 
         public void TryBuyItem()
         {
+            if(_beckendHandler.GetCurrentBalance() <= 0)
+                    return;
+
             var freeCells = GetFreeCells();
-            
+
             if (freeCells.Count == 0)
             {
                 Debug.Log("Нет свободных ячеек для покупки.");
@@ -36,31 +43,46 @@ namespace Assets._Project.Scripts.Levels.Controllers
 
             if (itemData != null)
             {
-                var targetCell = freeCells[0];
-                _itemsController.SpawnItems(itemData, targetCell);
+                CellView targetCell = freeCells[0];
+                ItemWeaponView item = _itemsController.SpawnItems(itemData, targetCell);
+                _beckendHandler.PostSpend(item.ItemWeaponModel.Price);
             }
         }
 
-        private void SpawnInitialItems()
+        public void SpawnInitialItems(GamesBeckendHandler backend)
         {
             var freeCells = GetFreeCells();
+            var itemData = GetItemDataByLevel(OneLevelItem);
 
-            if (freeCells.Count < 2)
-                return;
+            if (freeCells.Count < 2 || itemData == null) return;
 
-            var itemData = GetItemDataByLevel(1);
-            if (itemData == null)
-                return;
+            var selected = freeCells.Take(CountItem).ToList();
 
-            var selectedCells = freeCells.OrderBy(_ => Random.value).Take(2).ToList();
-            _itemsController.SpawnItems(itemData, selectedCells);
+            foreach (var cell in selected)
+            {
+                ItemWeaponView item = _itemsController.SpawnItems(itemData, cell);
+                backend.PostItems(item);
+            }
         }
 
+        public void RestoreItems(List<ItemWeaponSaveData> savedItems)
+        {
+            foreach (var saved in savedItems)
+            {
+                var cell = GetFreeCells().FirstOrDefault();
+                if (cell == null) continue;
 
-        private List<CellView> GetFreeCells() => 
-            _cells.Where(cell => !cell.IsBusy).ToList();
+                var itemData = _itemWeaponDatas.FirstOrDefault(d => d.Level == saved.Level);
+                if (itemData == null) continue;
 
-        private ItemWeaponData GetItemDataByLevel(int level) => 
-            _itemWeaponDatas.FirstOrDefault(data => data.Level == level);
+                var item = _itemsController.SpawnItems(itemData, cell);
+                item.CreateModel(new ItemWeaponModel(saved.Id, saved.Level, saved.Price, saved.Reward, Enum.Parse<ItemType>(saved.ItemType)));
+            }
+        }
+
+        private List<CellView> GetFreeCells() => _cells.Where(c => !c.IsBusy).ToList();
+
+        private ItemWeaponData GetItemDataByLevel(int level) =>
+            _itemWeaponDatas.FirstOrDefault(d => d.Level == level);
     }
 }

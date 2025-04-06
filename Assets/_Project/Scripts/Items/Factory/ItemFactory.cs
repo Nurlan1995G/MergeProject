@@ -7,10 +7,6 @@ namespace Assets._Project.Scripts.Items.Factory
 {
     public class ItemFactory
     {
-        public ItemFactory()
-        {
-        }
-
         public ItemWeaponView GetItem(Vector3 position, ItemWeaponView itemPrefabs)
         {
             ItemWeaponView item = Object.Instantiate(itemPrefabs, position, Quaternion.identity);

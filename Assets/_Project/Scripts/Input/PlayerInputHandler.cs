@@ -29,7 +29,6 @@ namespace Assets._Project.Scripts.Input
             BindInputActions();
         }
 
-
         private void OnDisable()
         {
             _tapAction.performed -= OnClick;

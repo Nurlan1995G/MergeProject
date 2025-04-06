@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Assets._Project.Scripts.BackendService;
+using TMPro;
 using UnityEngine;
 
 namespace Assets._Project.Scripts.UI
@@ -7,17 +8,21 @@ namespace Assets._Project.Scripts.UI
     {
         [SerializeField] private TextMeshProUGUI _balancePlayer;
 
-        private PlayerData _playerData;
+        private GamesBeckendHandler _backendHandler;
 
-        public void Construct(PlayerData playerData)
+        public void Construct(GamesBeckendHandler backendHandler)
         {
-            _playerData = playerData;
+            _backendHandler = backendHandler;
+            _backendHandler.OnBalanceChanged += UpdateBalance;  
         }
 
-        public void ShowBalancePlayer()
-        {
-            int balance = _playerData.Balance;
+        public void UpdateBalance(int balance) => 
             _balancePlayer.text = $"{balance}";
+
+        private void OnDisable()
+        {
+            if (_backendHandler != null)
+                _backendHandler.OnBalanceChanged -= UpdateBalance;  
         }
     }
 }

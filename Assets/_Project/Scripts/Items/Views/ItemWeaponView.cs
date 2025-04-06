@@ -14,9 +14,7 @@ namespace Assets._Project.Scripts
         public void SetCurrentCell(CellView cell) =>
             _currentCell = cell;
 
-        public void CreateModel(ItemWeaponModel model)
-        {
+        public void CreateModel(ItemWeaponModel model) => 
             _weaponModel = model;
-        }
     }
 }
